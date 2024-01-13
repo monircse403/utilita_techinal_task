@@ -10,6 +10,7 @@
         "phpunit/phpunit": "^10.5"
     },
     "license": "MIT",
+    "version": "1.0.0",
     "autoload": {
         "psr-4": {
             "Utilita\\ElectricityBillCalculator\\": "src/"

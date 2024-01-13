@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1)
 /*
   * Author: Md Moniruzzzaman
   * Date: 13.01.2024 10:13:00
@@ -7,26 +6,23 @@ declare(strict_types=1)
   */
 require_once __DIR__ . '/vendor/autoload.php';
 
-use \Utilita\ElectricityBillCalculator\GenerateDummyData;
-use \Utilita\ElectricityBillCalculator\CalculateElectricityBill;
+use Utilita\ElectricityBillCalculator\Controller\CalculateElectricityBill;
+use Utilita\ElectricityBillCalculator\DummyData\GenerateDummyData;
 
 // enter argument as 2.3 1.2 or 1.2 3.4
+header('Content-Type: application/json; charset=utf-8');
 
 if (isset($argv[1]) && isset($argv[2])) {
     try {
-        $peak_hours_billing_rate = $argv[1];
-        $off_peak_hours_billing_rate = $argv[2];
-        if ($peak_hours_billing_rate > 0 || $off_peak_hours_billing_rate > 0) {
-            $generateDummyDataObj = new GenerateDummyData();
-            $data = $generateDummyDataObj
-                ->setNumOfDataToBeGenerated(5)
-                ->setStartDate('2023-12-01')
-                ->setEndDate('2023-12-02')
-                ->generateDummyJsonData();
+        $peakHoursBillingRate = $argv[1];
+        $offPeakHoursBillingRate = $argv[2];
+        if ($peakHoursBillingRate > 0 || $offPeakHoursBillingRate > 0) {
+            $generateDummyDataObj = new GenerateDummyData(5, '2023-12-01','2023-12-02');
+            $data = $generateDummyDataObj->generateDummyJsonData();
             $calculateElectricityBillObj = new CalculateElectricityBill();
-            $bill_data = $calculateElectricityBillObj
-                        ->calculateBill($data, $peak_hours_billing_rate, $off_peak_hours_billing_rate);
-            echo json_encode($bill_data);
+            $billData = $calculateElectricityBillObj
+                        ->calculateBill($data, $peakHoursBillingRate, $offPeakHoursBillingRate);
+            echo json_encode($billData);
         }
 
     } catch (\Exception $e) {
