@@ -1,0 +1,29 @@
+{
+    "name": "utilita/electricitybillcalculator",
+    "description": "Designing an optimised billing system for a utility company that uses smart meters to measure and monitor electricity usage for households.",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "license": "Utilita Ltd",
+    "autoload": {
+        "psr-4": {
+            "Utilita\\ElectricityBillCalculator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utilita\\ElectricityBillCalculator\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Md Moniruzzaman",
+            "email": "monircse403@gmail.com"
+        }
+    ]
+}
