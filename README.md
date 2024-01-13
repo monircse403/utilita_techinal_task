@@ -20,3 +20,5 @@ Usage :
 2. The expected output will be in json array
 
 php index.php 4.3 2.2
+
+The arguments must be float/int

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1)
 /*
   * Author: Md Moniruzzzaman
   * Date: 13.01.2024 10:13:00
@@ -8,6 +9,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use \Utilita\ElectricityBillCalculator\GenerateDummyData;
 use \Utilita\ElectricityBillCalculator\CalculateElectricityBill;
+
+// enter argument as 2.3 1.2 or 1.2 3.4
 
 if (isset($argv[1]) && isset($argv[2])) {
     try {
@@ -21,7 +24,8 @@ if (isset($argv[1]) && isset($argv[2])) {
                 ->setEndDate('2023-12-02')
                 ->generateDummyJsonData();
             $calculateElectricityBillObj = new CalculateElectricityBill();
-            $bill_data = $calculateElectricityBillObj->calculateBill($data, $peak_hours_billing_rate, $off_peak_hours_billing_rate);
+            $bill_data = $calculateElectricityBillObj
+                        ->calculateBill($data, $peak_hours_billing_rate, $off_peak_hours_billing_rate);
             echo json_encode($bill_data);
         }
 
