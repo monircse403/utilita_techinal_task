@@ -26,7 +26,7 @@ class GenerateDummyData
      * @param $numOfDataToBeGenerated
      * @param $startDate
      * @param $endDate
-     * @return array
+     * @return array|false|string
      */
     public function generateDummyJsonData()
     {
@@ -49,7 +49,7 @@ class GenerateDummyData
      * @param string $format
      * @return bool|string
      */
-    private function generateRandomDate($startDate, $endDate, $format = 'Y-m-d\TH:i:s')
+    private function generateRandomDate($startDate, $endDate, string $format = 'Y-m-d\TH:i:s')
     {
         // Convert the supplied date to timestamp
         $fMin = strtotime($startDate);

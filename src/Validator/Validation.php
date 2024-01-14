@@ -1,6 +1,7 @@
 <?php
 
 namespace Utilita\ElectricityBillCalculator\Validator;
+
 use Utilita\ElectricityBillCalculator\ValidationException\ValidationException;
 
 /**
@@ -11,8 +12,7 @@ use Utilita\ElectricityBillCalculator\ValidationException\ValidationException;
 class Validation
 {
 
-
-    public $errors = array();
+    private $errors = array();
 
     /**
      * @return boolean
@@ -35,19 +35,19 @@ class Validation
      * if value is interger
      *
      * @param mixed $value
-     * @return mixed
+     * @return  mixed
+     * @throws ValidationException
      */
     public function isInt($value)
     {
         if (!$value) {
-            return false;
+            $this->errors [] = 'Input Cannot Be Null or Empty';
         }
-        try {
-            if (filter_var($value, FILTER_VALIDATE_INT))
-                return $value;
-        } catch (ValidationException $e) {
-            throw $e->invalidInt();
+        if (!filter_var($value, FILTER_VALIDATE_INT)) {
+            $this->errors [] = 'Input Must Be Integer';
+
         }
+        return true;
 
 
     }
@@ -56,18 +56,18 @@ class Validation
      * if value is float
      *
      * @param mixed $value
-     * @return
+     * @throws ValidationException
      */
     public function isFloat($value)
     {
         if (!$value) {
-            return false;
+            $this->errors [] = 'Input Cannot Be Null or Empty';
         }
-        try {
-            if (filter_var($value, FILTER_VALIDATE_FLOAT)) return $value;
-        } catch (ValidationException $e) {
-            throw $e->invalidFloat();
+        if (!filter_var($value, FILTER_VALIDATE_FLOAT)) {
+            $this->errors [] = 'Input Must Be Float';
         }
+        return true;
+
 
     }
 
@@ -76,18 +76,21 @@ class Validation
      *
      * @param mixed $value
      * @return mixed
+     * @throws ValidationException
      */
 
     public function isIntOrFloat($value)
     {
         if (!$value) {
-            return false;
+            $this->errors [] = 'Input Cannot Be Null or Empty';
         }
-
         try {
-            if ($this->isInt($value) || $this->isFloat($value)) return $value;
+            if (!$this->isInt($value) || !$this->isFloat($value)) {
+                $this->errors [] = 'Input Must Be Integer or Float';
+            }
+            return $value;
         } catch (ValidationException $e) {
-            throw $e->invalidIntOrFloat();
+            $this->errors [] = get_class($e) . ": " . $e->invalidIntOrFloat();
         }
     }
 
@@ -97,19 +100,33 @@ class Validation
      * @return string
      * @throws ValidationException
      */
-    public function isDate($value) : string
+    public function isDate($value)
     {
         if (!$value) {
+            $this->errors [] = 'Input Cannot Be Null or Empty';
             return false;
         }
-
         try {
-            new \DateTime($value);
-            return $value;
+            if (new \DateTime($value)) return $value; else return false;
         } catch (ValidationException $e) {
-            throw $e->invalidDate();
+            $this->errors [] = get_class($e) . ": " . $e->invalidDate();
         }
     }
 
+    public function isNumeric($value)
+    {
+        try {
+            if (!$value) {
+                $this->errors [] = 'Number Must be Greater then Zero';
+            }
+
+            if (!is_numeric($value)) {
+                $this->errors [] = 'Number Must be Integer or Float';
+            }
+            return $value;
+        } catch (\Exception $e) {
+            $this->errors [] = get_class($e) . ": " . $e->getMessage();;
+        }
+    }
 
 }
