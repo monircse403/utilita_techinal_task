@@ -24,9 +24,10 @@ if (isset($argv[1]) && isset($argv[2])) {
             $data = $generateDummyDataObj->generateDummyJsonData();
             $calculateElectricityBillObj = new CalculateElectricityBill();
             $billData = $calculateElectricityBillObj->calculateBill($data, $peakHoursBillingRate, $offPeakHoursBillingRate);
-            echo json_encode($billData);
+            if (is_array($billData)) echo json_encode($billData);
         } else {
-            echo '<pre>';print_r($validation->getErrors());
+            echo '<pre>';
+            print_r($validation->getErrors());
         }
 
     } catch (\Exception $e) {

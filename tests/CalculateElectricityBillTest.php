@@ -9,7 +9,6 @@ class CalculateElectricityBillTest extends TestCase
 {
 
     /** @tests
-     * @throws ValidationException\ValidationException
      */
     public function testCalculateBill(){
 

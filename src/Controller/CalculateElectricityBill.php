@@ -15,19 +15,20 @@ class CalculateElectricityBill implements PeakOffPeakHoursInterface
      * @param $peakHourRate
      * @param $offPeakHourRate
      * @return array
-     * @throws ValidationException
      */
-    public function calculateBill($data, $peakHourRate, $offPeakHourRate): array
+    public function calculateBill($data, $peakHourRate, $offPeakHourRate)
     {
 
         $data = json_decode($data);
         $result = [];
-        $data = $this->skipInValidDataFromArray($data);
+        $validation = new Validation();
+        $error = NULL;
         try {
             foreach ($data as $values) {
-                $meterId = $values["0"];
-                $dateTime = $values["1"];
-                $meter_reading = $values["2"];
+                $meterId = $validation->isIntOrFloat($values["0"]);
+                $dateTime = $validation->isDate($values["1"]);
+                $meter_reading = $validation->isIntOrFloat($values["2"]);
+                if ($validation->isSuccess()) {
                     if ($this->isPeakHour($dateTime)) {
                         $totalBill = round($peakHourRate * $meter_reading, 2, 0);
                     } else {
@@ -40,28 +41,23 @@ class CalculateElectricityBill implements PeakOffPeakHoursInterface
                         "isPeakHourRate" => $this->isPeakHour($dateTime) ? "Peak Hour Rate: $peakHourRate" : "Off-Peak Hour Rate: $offPeakHourRate",
                         "totalBill" => $totalBill
                     ];
+                } else {
+                    $error = $validation->getErrors();
+                }
             }
         } catch (ValidationException $e) {
-            echo $e->invalidBillData();
+            $error = $e->invalidBillData();
+        }
+        if (empty($error)) {
+            return $result;
+        } else {
+            echo '<pre>';
+            print_r($error);
+            return false;
         }
 
-        return $result;
     }
 
-    /**
-     * @throws ValidationException
-     */
-    private function skipInValidDataFromArray($data): array
-    {
-        $finalData = [];
-        $validation = new Validation();
-        foreach ($data as $values) {
-            if($validation->isIntOrFloat($values["0"]) && $validation->isDate($values["1"]) && $validation->isIntOrFloat($values["2"])){
-                $finalData[]  = $values;
-            }
-        }
-        return $finalData;
-    }
     /**
      * Method to check if the hour is peak hour/off-peak hour
      * @param $dateTime
@@ -88,8 +84,7 @@ class CalculateElectricityBill implements PeakOffPeakHoursInterface
     private function hoursToMinutes($hours): int
     {
         $minutes = 0;
-        if (strpos($hours, ':') !== false)
-        {
+        if (strpos($hours, ':') !== false) {
             // Split hours and minutes.
             list($hours, $minutes) = explode(':', $hours);
         }
