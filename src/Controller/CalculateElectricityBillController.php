@@ -7,7 +7,7 @@ use Utilita\ElectricityBillCalculator\UtilitaInterface\PeakOffPeakHoursInterface
 use Utilita\ElectricityBillCalculator\ValidationException\ValidationException;
 use Utilita\ElectricityBillCalculator\Validator\Validation;
 
-class CalculateElectricityBill implements PeakOffPeakHoursInterface
+class CalculateElectricityBillController implements PeakOffPeakHoursInterface
 {
     /**
      * Method to Calculate Consumption Bill

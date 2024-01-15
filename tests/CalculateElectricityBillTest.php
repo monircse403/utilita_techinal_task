@@ -3,7 +3,7 @@
 namespace Utilita\ElectricityBillCalculator;
 
 use PHPUnit\Framework\TestCase;
-use Utilita\ElectricityBillCalculator\Controller\CalculateElectricityBill;
+use Utilita\ElectricityBillCalculator\Controller\CalculateElectricityBillController;
 
 class CalculateElectricityBillTest extends TestCase
 {
@@ -20,7 +20,7 @@ class CalculateElectricityBillTest extends TestCase
         $data = json_encode($data);
         $peakHoursBillingRate = 4.00;
         $offPeakHoursBillingRate = 2.00;
-        $calculateElectricityBillObj = new CalculateElectricityBill();
+        $calculateElectricityBillObj = new CalculateElectricityBillController();
         $actual = $calculateElectricityBillObj->calculateBill($data, $peakHoursBillingRate, $offPeakHoursBillingRate);
         $expected [] = [
             "meterId" => 1,
