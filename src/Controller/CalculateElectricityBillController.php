@@ -3,6 +3,7 @@
 namespace Utilita\ElectricityBillCalculator\Controller;
 
 
+use Utilita\ElectricityBillCalculator\Config\Config;
 use Utilita\ElectricityBillCalculator\UtilitaInterface\PeakOffPeakHoursInterface;
 use Utilita\ElectricityBillCalculator\ValidationException\ValidationException;
 use Utilita\ElectricityBillCalculator\Validator\Validation;
@@ -67,8 +68,8 @@ class CalculateElectricityBillController implements PeakOffPeakHoursInterface
     {
         $postedHour = date('H:i', strtotime($dateTime));
         $postedHoursToMinutes = $this->hoursToMinutes($postedHour);
-        $peakHoursStart = $this->hoursToMinutes('07:00');
-        $peakHoursEnd = $this->hoursToMinutes('23:59');
+        $peakHoursStart = $this->hoursToMinutes(Config::PEAK_HOUR_START);
+        $peakHoursEnd = $this->hoursToMinutes(Config::PEAK_HOUR_END);
         if ($postedHoursToMinutes >= $peakHoursStart && $postedHoursToMinutes <= $peakHoursEnd) {
             return true;
         } else {

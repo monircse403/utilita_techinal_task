@@ -7,6 +7,7 @@ declare(strict_types=1);
   */
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Utilita\ElectricityBillCalculator\Config\Config;
 use Utilita\ElectricityBillCalculator\Controller\CalculateElectricityBillController;
 use Utilita\ElectricityBillCalculator\DummyData\GenerateDummyData;
 use Utilita\ElectricityBillCalculator\Validator\Validation;
@@ -23,7 +24,7 @@ if (isset($argv[1]) && isset($argv[2])) {
             // 5 => num of rows to generate for array
             // 2023-12-01 => start date from when the data is started
             // 2023-12-02' => end date from when the data is ended
-            $generateDummyDataObj = new GenerateDummyData(5, '2023-12-01', '2023-12-02');
+            $generateDummyDataObj = new GenerateDummyData(Config::NUMBER_OF_DATA_GENERATE, Config::START_DATE, Config::END_DATE);
             $dummyData = $generateDummyDataObj->generateDummyJsonData();
             $calculateElectricityBillObj = new CalculateElectricityBillController();
             $billData = $calculateElectricityBillObj->calculateBill($dummyData, $peakHoursBillingRate, $offPeakHoursBillingRate);
