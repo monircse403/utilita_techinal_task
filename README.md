@@ -8,3 +8,5 @@ Usage :
 
 
 The arguments must be float/int
+
+The output will be json format with the data as array
